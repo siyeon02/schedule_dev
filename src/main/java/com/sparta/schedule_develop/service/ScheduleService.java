@@ -4,10 +4,11 @@ import com.sparta.schedule_develop.dto.ScheduleRequestDto;
 import com.sparta.schedule_develop.dto.ScheduleResponseDto;
 import com.sparta.schedule_develop.entity.Schedule;
 import com.sparta.schedule_develop.repository.ScheduleRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class ScheduleService {
@@ -15,6 +16,11 @@ public class ScheduleService {
 
     public ScheduleService(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
+    }
+
+    public Page<Schedule> getSchedule(int page, int size) {
+        PageRequest pageRequest = PageRequest.of(page, size, Sort.by("modifiedAt").descending());
+        return scheduleRepository.findAll(pageRequest);
     }
 
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
@@ -25,10 +31,10 @@ public class ScheduleService {
         return scheduleResponseDto;
     }
 
-    public List<ScheduleResponseDto> getSchedule() {
-        //db 조회
-        return scheduleRepository.findAllByOrderByModifiedAtDesc().stream().map(ScheduleResponseDto::new).toList();
-    }
+//    public List<ScheduleResponseDto> getSchedule() {
+//        //db 조회
+//        return scheduleRepository.findAllByOrderByModifiedAtDesc().stream().map(ScheduleResponseDto::new).toList();
+//    }
 
     public ScheduleResponseDto getOneSchedule(Long id) {
         return scheduleRepository.findById(id)

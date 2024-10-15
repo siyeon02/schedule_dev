@@ -1,18 +1,21 @@
 package com.sparta.schedule_develop.dto;
 
 import com.sparta.schedule_develop.entity.Comment;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
 
 @Getter
+@AllArgsConstructor
 public class CommentResponseDto {
-    public Long schedule_id;
     private final Long id;
     private final String username;
     private final String comment;
     private final LocalDateTime createdAt;
     private final LocalDateTime modifiedAt;
+    public Long schedule_id;
+
 
     public CommentResponseDto(Comment comment) {
         this.id = comment.getId();
