@@ -15,6 +15,8 @@ import java.util.List;
 @Table(name = "schedule")
 @NoArgsConstructor
 public class Schedule extends Timestamped {
+
+
     @Column(name = "username", nullable = false)
     private String username;
     @Column(name = "title", nullable = false)
@@ -29,10 +31,14 @@ public class Schedule extends Timestamped {
     private List<Comment> comment = new ArrayList<>();
 
 
+    @OneToMany(mappedBy = "schedule", fetch = FetchType.LAZY)
+    private List<Dashboard> dashboardList = new ArrayList<>();
+
+
     public Schedule(ScheduleRequestDto requestDto) {
         this.username = requestDto.getUsername();
         this.title = requestDto.getTitle();
-        this.content = requestDto.getTitle();
+        this.content = requestDto.getContent();
     }
 
     public void update(ScheduleRequestDto requestDto) {

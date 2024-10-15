@@ -16,6 +16,7 @@ public class ScheduleResponseDto {
     private LocalDateTime createAt;
     private LocalDateTime modifiedAt;
     private int commentCount;
+    //private Long user_id;
 
     public ScheduleResponseDto(Schedule schedule) {
         this.id = schedule.getId();

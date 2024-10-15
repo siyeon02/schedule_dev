@@ -4,6 +4,7 @@ import com.sparta.schedule_develop.dto.CommentRequestDto;
 import com.sparta.schedule_develop.dto.CommentResponseDto;
 import com.sparta.schedule_develop.entity.Schedule;
 import com.sparta.schedule_develop.service.CommentService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -14,6 +15,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
+    @Autowired
     public CommentController(CommentService commentService) {
         this.commentService = commentService;
     }
