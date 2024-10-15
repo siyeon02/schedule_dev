@@ -6,6 +6,7 @@ import com.sparta.schedule_develop.entity.Comment;
 import com.sparta.schedule_develop.entity.Schedule;
 import com.sparta.schedule_develop.repository.CommentRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -51,5 +52,25 @@ public class CommentService {
 
     }
 
+    @Transactional
+    public Long updateComment(Schedule scheduleId, Long id, CommentRequestDto requestDto) {
 
+        Comment comment = findById(id);
+        comment.update(requestDto);
+
+        return id;
+
+    }
+
+
+    public Long deleteComment(Schedule scheduleId, Long id) {
+        Comment comment = findById(id);
+        commentRepository.delete(comment);
+        return id;
+    }
+
+    private Comment findById(Long id) {
+        return commentRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 댓글은 존재하지 않습니다."));
+    }
 }

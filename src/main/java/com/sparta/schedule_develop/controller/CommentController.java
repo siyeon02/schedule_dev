@@ -33,5 +33,15 @@ public class CommentController {
         return commentService.getComment(scheduleId, id);
     }
 
+    @PutMapping("/comments/{id}")
+    public Long updateComment(@PathVariable Schedule scheduleId, @PathVariable Long id, @RequestBody CommentRequestDto requestDto) {
+        return commentService.updateComment(scheduleId, id, requestDto);
+    }
+
+    @DeleteMapping("/comments/{id}")
+    public Long deleteComment(@PathVariable Schedule scheduleId, @PathVariable Long id) {
+        return commentService.deleteComment(scheduleId, id);
+    }
+
 
 }
