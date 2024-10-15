@@ -32,8 +32,9 @@ public class ScheduleService {
 
     public ScheduleResponseDto getOneSchedule(Long id) {
         return scheduleRepository.findById(id)
-                .map(schedule -> new ScheduleResponseDto(schedule))
-                .orElseThrow(()-> new IllegalArgumentException("선택한 스케줄은 존재하지 않습니다"));
+                .map(ScheduleResponseDto::new)
+                .orElseThrow(() -> new IllegalArgumentException("선택한 스케줄은 존재하지 않습니다"));
+
     }
 
     @Transactional
@@ -43,6 +44,7 @@ public class ScheduleService {
         return id;
     }
 
+
     public Long deleteSchedule(Long id) {
         Schedule schedule = findSchedule(id);
         scheduleRepository.delete(schedule);
@@ -50,7 +52,7 @@ public class ScheduleService {
     }
 
     private Schedule findSchedule(Long id) {
-        return scheduleRepository.findById(id).orElseThrow(()->
+        return scheduleRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("선택한 스케줄은 존재하지 않습니다.")
         );
     }
