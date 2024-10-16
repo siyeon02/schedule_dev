@@ -36,7 +36,7 @@ public class ScheduleController {
         Page<Schedule> schedules = scheduleService.getSchedule(page, size);
         return schedules.map(schedule -> new ScheduleResponseDto(
                 schedule.getId(),
-                schedule.getUsername(),
+                schedule.getCreator().getUsername(),
                 schedule.getTitle(),
                 schedule.getContent(),
                 schedule.getCreatedAt(),

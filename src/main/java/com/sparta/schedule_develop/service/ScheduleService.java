@@ -2,8 +2,12 @@ package com.sparta.schedule_develop.service;
 
 import com.sparta.schedule_develop.dto.ScheduleRequestDto;
 import com.sparta.schedule_develop.dto.ScheduleResponseDto;
+import com.sparta.schedule_develop.entity.Dashboard;
 import com.sparta.schedule_develop.entity.Schedule;
+import com.sparta.schedule_develop.entity.User;
+import com.sparta.schedule_develop.repository.DashboardRepository;
 import com.sparta.schedule_develop.repository.ScheduleRepository;
+import com.sparta.schedule_develop.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -13,11 +17,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
+    private final UserRepository userRepository;
+    private final DashboardRepository dashboardRepository;
 
 
-    public ScheduleService(ScheduleRepository scheduleRepository) {
+    public ScheduleService(ScheduleRepository scheduleRepository, UserRepository userRepository, DashboardRepository dashboardRepository) {
         this.scheduleRepository = scheduleRepository;
-
+        this.userRepository = userRepository;
+        this.dashboardRepository = dashboardRepository;
     }
 
     public Page<Schedule> getSchedule(int page, int size) {
@@ -26,11 +33,32 @@ public class ScheduleService {
     }
 
     public ScheduleResponseDto createSchedule(ScheduleRequestDto requestDto) {
+
+        User creator = userRepository.findById(requestDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다."));
+
         Schedule schedule = new Schedule(requestDto);
+        schedule.setCreator(creator);
+
+        // DB에 스케줄 저장
+        Schedule savedSchedule = scheduleRepository.save(schedule);
+
+        // 담당 유저 할당 (assignedUserIds가 존재할 경우)
+        if (requestDto.getAssignedUserIds() != null) {
+            for (Long userId : requestDto.getAssignedUserIds()) {
+                User assignedUser = userRepository.findById(userId)
+                        .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 담당 유저입니다."));
+                Dashboard dashboard = new Dashboard(savedSchedule, assignedUser);
+                dashboardRepository.save(dashboard);
+            }
+        }
+
+        // 스케줄을 저장 후, 응답 DTO로 변환
+        return new ScheduleResponseDto(savedSchedule);
         //db 저장
-        Schedule saveSchedule = scheduleRepository.save(schedule);
-        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(saveSchedule);
-        return scheduleResponseDto;
+//        Schedule saveSchedule = scheduleRepository.save(schedule);
+//        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(saveSchedule);
+//        return scheduleResponseDto;
 
     }
 

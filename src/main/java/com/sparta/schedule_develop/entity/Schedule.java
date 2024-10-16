@@ -17,8 +17,12 @@ import java.util.List;
 public class Schedule extends Timestamped {
 
 
-    @Column(name = "username", nullable = false)
-    private String username;
+    // 작성자와의 다대일 관계 (작성자 한 명이 여러 일정을 가질 수 있음)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "creator_id", nullable = false)  // 작성자 필드로 user 고유 식별자 사용
+    private User creator;
+    //    @Column(name = "username", nullable = false)
+//    private String username;
     @Column(name = "title", nullable = false)
     private String title;
     @Column(name = "content", length = 200)
@@ -37,7 +41,6 @@ public class Schedule extends Timestamped {
 
 
     public Schedule(ScheduleRequestDto requestDto) {
-        this.username = requestDto.getUsername();
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
     }
