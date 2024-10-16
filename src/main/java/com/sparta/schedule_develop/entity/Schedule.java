@@ -21,15 +21,22 @@ public class Schedule extends Timestamped {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "creator_id", nullable = false)  // 작성자 필드로 user 고유 식별자 사용
     private User creator;
-    //    @Column(name = "username", nullable = false)
-//    private String username;
+
     @Column(name = "title", nullable = false)
     private String title;
+
     @Column(name = "content", length = 200)
     private String content;
+
+    @Column(name = "weather", length = 10000)
+    private String weather;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    //    @Column(name = "username", nullable = false)
+//    private String username;
 
 
     @OneToMany(mappedBy = "schedule", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -43,6 +50,12 @@ public class Schedule extends Timestamped {
     public Schedule(ScheduleRequestDto requestDto) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
+    }
+
+    public Schedule(ScheduleRequestDto requestDto, String weather) {
+        this.title = requestDto.getTitle();
+        this.content = requestDto.getContent();
+        this.weather = weather;
     }
 
 

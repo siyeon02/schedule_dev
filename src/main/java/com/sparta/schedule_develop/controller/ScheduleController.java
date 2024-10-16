@@ -41,7 +41,8 @@ public class ScheduleController {
                 schedule.getContent(),
                 schedule.getCreatedAt(),
                 schedule.getModifiedAt(),
-                schedule.getComment().size() // 댓글 개수
+                schedule.getComment().size(), // 댓글 개수
+                schedule.getWeather()
 
         ));
     }

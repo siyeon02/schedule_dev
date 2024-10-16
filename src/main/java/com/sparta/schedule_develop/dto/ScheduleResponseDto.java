@@ -16,6 +16,7 @@ public class ScheduleResponseDto {
     private LocalDateTime createAt;
     private LocalDateTime modifiedAt;
     private int commentCount;
+    private String weather;
     //private Long user_id;
 
     public ScheduleResponseDto(Schedule schedule) {
@@ -26,6 +27,7 @@ public class ScheduleResponseDto {
         this.createAt = schedule.getCreatedAt();
         this.modifiedAt = schedule.getModifiedAt();
         this.commentCount = schedule.getComment().size();
+        this.weather = schedule.getWeather();
     }
 
 

@@ -19,12 +19,14 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
     private final DashboardRepository dashboardRepository;
+    private final WeatherService weatherService;
 
 
-    public ScheduleService(ScheduleRepository scheduleRepository, UserRepository userRepository, DashboardRepository dashboardRepository) {
+    public ScheduleService(ScheduleRepository scheduleRepository, UserRepository userRepository, DashboardRepository dashboardRepository, WeatherService weatherService) {
         this.scheduleRepository = scheduleRepository;
         this.userRepository = userRepository;
         this.dashboardRepository = dashboardRepository;
+        this.weatherService = weatherService;
     }
 
     public Page<Schedule> getSchedule(int page, int size) {
@@ -37,7 +39,9 @@ public class ScheduleService {
         User creator = userRepository.findById(requestDto.getUserId())
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자 입니다."));
 
-        Schedule schedule = new Schedule(requestDto);
+        String weather = weatherService.getTodayWeather();
+
+        Schedule schedule = new Schedule(requestDto, weather);
         schedule.setCreator(creator);
 
         // DB에 스케줄 저장
