@@ -25,13 +25,35 @@ public class User extends Timestamped {
     @Column(name = "email", nullable = false, length = 100)
     private String email;
 
+    @Column(name = "password", nullable = false, length = 255)
+    private String password;
+
+    @Column(nullable = false)
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Dashboard> dashboardList = new ArrayList<>();
 
+
     public User(UserRequestDto requestDto) {
         this.username = requestDto.getUsername();
         this.email = requestDto.getEmail();
+        this.password = requestDto.getPassword();
+    }
+
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
+    public User(String username, String password, String email, UserRoleEnum role) {
+
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.role = role;
     }
 
 

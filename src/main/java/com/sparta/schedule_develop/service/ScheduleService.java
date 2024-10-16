@@ -13,13 +13,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
-//    private final UserRepository userRepository;
-//    private final DashboardRepository dashboardRepository;
+
 
     public ScheduleService(ScheduleRepository scheduleRepository) {
         this.scheduleRepository = scheduleRepository;
-//        this.userRepository = userRepository;
-//        this.dashboardRepository = dashboardRepository;
+
     }
 
     public Page<Schedule> getSchedule(int page, int size) {

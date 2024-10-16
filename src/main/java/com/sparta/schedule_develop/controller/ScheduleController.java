@@ -4,6 +4,7 @@ import com.sparta.schedule_develop.dto.ScheduleRequestDto;
 import com.sparta.schedule_develop.dto.ScheduleResponseDto;
 import com.sparta.schedule_develop.entity.Schedule;
 import com.sparta.schedule_develop.service.ScheduleService;
+import com.sparta.schedule_develop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
@@ -12,15 +13,18 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api")
 public class ScheduleController {
     private final ScheduleService scheduleService;
+    private final UserService userService;
 
 
     @Autowired
-    public ScheduleController(ScheduleService scheduleService) {
+    public ScheduleController(ScheduleService scheduleService, UserService userService) {
         this.scheduleService = scheduleService;
+        this.userService = userService;
     }
 
     @PostMapping("/schedule")
     public ScheduleResponseDto createSchedule(@RequestBody ScheduleRequestDto requestDto) {
+
         return scheduleService.createSchedule(requestDto);
     }
 
