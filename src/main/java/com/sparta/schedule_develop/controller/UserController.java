@@ -38,10 +38,10 @@ public class UserController {
     }
 
 
-    @PostMapping("/users")
-    public UserResponseDto createUser(@RequestBody UserRequestDto requestDto) {
-        return userService.createUser(requestDto);
-    }
+//    @PostMapping("/users")
+//    public UserResponseDto createUser(@RequestBody UserRequestDto requestDto) {
+//        return userService.createUser(requestDto);
+//    }
 
     @GetMapping("/users")
     public List<UserResponseDto> getUsers() {
