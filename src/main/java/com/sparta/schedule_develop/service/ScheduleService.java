@@ -8,6 +8,7 @@ import com.sparta.schedule_develop.entity.User;
 import com.sparta.schedule_develop.repository.DashboardRepository;
 import com.sparta.schedule_develop.repository.ScheduleRepository;
 import com.sparta.schedule_develop.repository.UserRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -15,19 +16,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@RequiredArgsConstructor
 public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final UserRepository userRepository;
     private final DashboardRepository dashboardRepository;
     private final WeatherService weatherService;
 
-
-    public ScheduleService(ScheduleRepository scheduleRepository, UserRepository userRepository, DashboardRepository dashboardRepository, WeatherService weatherService) {
-        this.scheduleRepository = scheduleRepository;
-        this.userRepository = userRepository;
-        this.dashboardRepository = dashboardRepository;
-        this.weatherService = weatherService;
-    }
 
     public Page<Schedule> getSchedule(int page, int size) {
         PageRequest pageRequest = PageRequest.of(page, size, Sort.by("modifiedAt").descending());
@@ -41,8 +36,8 @@ public class ScheduleService {
 
         String weather = weatherService.getTodayWeather();
 
-        Schedule schedule = new Schedule(requestDto, weather);
-        schedule.setCreator(creator);
+        Schedule schedule = new Schedule(requestDto.getTitle(), requestDto.getContent(), weather, creator);
+//        schedule.setCreator(creator);
 
         // DB에 스케줄 저장
         Schedule savedSchedule = scheduleRepository.save(schedule);
@@ -59,17 +54,9 @@ public class ScheduleService {
 
         // 스케줄을 저장 후, 응답 DTO로 변환
         return new ScheduleResponseDto(savedSchedule);
-        //db 저장
-//        Schedule saveSchedule = scheduleRepository.save(schedule);
-//        ScheduleResponseDto scheduleResponseDto = new ScheduleResponseDto(saveSchedule);
-//        return scheduleResponseDto;
 
     }
 
-//    public List<ScheduleResponseDto> getSchedule() {
-//        //db 조회
-//        return scheduleRepository.findAllByOrderByModifiedAtDesc().stream().map(ScheduleResponseDto::new).toList();
-//    }
 
     public ScheduleResponseDto getOneSchedule(Long id) {
         return scheduleRepository.findById(id)
@@ -81,7 +68,7 @@ public class ScheduleService {
     @Transactional
     public Long updateSchedule(Long id, ScheduleRequestDto requestDto) {
         Schedule schedule = findSchedule(id);
-        schedule.update(requestDto);
+        schedule.update(requestDto.getTitle(), requestDto.getContent());
         return id;
     }
 

@@ -1,15 +1,14 @@
 package com.sparta.schedule_develop.entity;
 
-import com.sparta.schedule_develop.dto.CommentRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@RequiredArgsConstructor
 @Table(name = "comment")
 public class Comment extends Timestamped {
     @Id
@@ -26,14 +25,19 @@ public class Comment extends Timestamped {
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
-    public Comment(CommentRequestDto requestDto) {
-        this.username = requestDto.getUsername();
-        this.comment = requestDto.getComment();
+    public Comment(String comment, String username, Schedule schedule) {
+        this.comment = comment;
+        this.username = username;
+        this.schedule = schedule;
     }
+//    public Comment(CommentRequestDto requestDto) {
+//        this.username = requestDto.getUsername();
+//        this.comment = requestDto.getComment();
+//    }
 
-    public void update(CommentRequestDto requestDto) {
-        this.username = requestDto.getUsername();
-        this.comment = requestDto.getComment();
+    public void update(String username, String comment) {
+        this.username = username;
+        this.comment = comment;
     }
 
 

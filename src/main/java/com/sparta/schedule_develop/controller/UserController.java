@@ -1,5 +1,6 @@
 package com.sparta.schedule_develop.controller;
 
+import com.sparta.schedule_develop.config.JWTUtil;
 import com.sparta.schedule_develop.dto.LoginRequestDto;
 import com.sparta.schedule_develop.dto.SignupRequestDto;
 import com.sparta.schedule_develop.dto.UserRequestDto;
@@ -15,13 +16,17 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+
 public class UserController {
 
     private final UserService userService;
+    private final JWTUtil jwtUtil;
+
 
     @Autowired
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JWTUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @PostMapping("/users/signup")
@@ -33,15 +38,11 @@ public class UserController {
 
     @PostMapping("/users/login")
     public ResponseEntity<String> login(@RequestBody LoginRequestDto requestDto, HttpServletResponse res) {
-        userService.login(requestDto, res);
+        String token = userService.login(requestDto);
+        res.setHeader(JWTUtil.AUTHORIZATION_HEADER, token);
         return ResponseEntity.status(HttpStatus.CREATED).body("로그인 성공");
     }
 
-
-//    @PostMapping("/users")
-//    public UserResponseDto createUser(@RequestBody UserRequestDto requestDto) {
-//        return userService.createUser(requestDto);
-//    }
 
     @GetMapping("/users")
     public List<UserResponseDto> getUsers() {
@@ -57,4 +58,5 @@ public class UserController {
     public Long deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id);
     }
+
 }
