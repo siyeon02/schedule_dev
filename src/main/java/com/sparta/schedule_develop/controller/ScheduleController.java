@@ -7,7 +7,6 @@ import com.sparta.schedule_develop.service.ScheduleService;
 import com.sparta.schedule_develop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -53,13 +52,11 @@ public class ScheduleController {
         return scheduleService.getOneSchedule(id);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @PutMapping("/schedule/{id}")
     public Long updateSchedule(@PathVariable Long id, @RequestBody ScheduleRequestDto requestDto) {
         return scheduleService.updateSchedule(id, requestDto);
     }
 
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
     @DeleteMapping("/schedule/{id}")
     public Long deleteSchedule(@PathVariable Long id) {
         return scheduleService.deleteSchedule(id);

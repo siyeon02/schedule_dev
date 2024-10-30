@@ -102,15 +102,16 @@ public class UserService {
         return id;
     }
 
-    public User findUser(Long id) {
-        return userRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("선택한 유저는 존재하지 않습니다"));
-    }
-
     public Long deleteUser(Long id) {
         User user = findUser(id);
         userRepository.delete(user);
         return id;
     }
+
+    private User findUser(Long id) {
+        return userRepository.findById(id).orElseThrow(() ->
+                new IllegalArgumentException("선택한 유저는 존재하지 않습니다"));
+    }
+
 
 }

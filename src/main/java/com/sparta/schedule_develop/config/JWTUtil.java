@@ -47,7 +47,7 @@ public class JWTUtil {
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username) // 사용자 식별자값(ID)
-                        .claim(AUTHORIZATION_KEY, role) // 사용자 권한
+                        .claim(AUTHORIZATION_KEY, role.getAuthority()) // 사용자 권한
                         .setExpiration(new Date(date.getTime() + TOKEN_TIME)) // 만료 시간
                         .setIssuedAt(date) // 발급일
                         .signWith(key, signatureAlgorithm) // 암호화 알고리즘
@@ -82,26 +82,21 @@ public class JWTUtil {
         } catch (SecurityException | MalformedJwtException | SignatureException e) {
             logger.error("유효하지 않는 JWT 서명 입니다.");
             throw new GlobalExceptionHandler.InvalidTokenException("유효하지 않는 JWT 서명 입니다.");
-            //logger.error("Invalid JWT signature, 유효하지 않는 JWT 서명 입니다.");
         } catch (ExpiredJwtException e) {
             logger.error("만료된 JWT token 입니다.");
             throw new GlobalExceptionHandler.ExpiredTokenException("만료된 JWT token 입니다.");
-            //logger.error("Expired JWT token, 만료된 JWT token 입니다.");
         } catch (UnsupportedJwtException e) {
             logger.error("지원되지 않는 JWT 토큰 입니다.");
             throw new GlobalExceptionHandler.UnsupportedTokenException("지원되지 않는 JWT 토큰 입니다.");
-            //logger.error("Unsupported JWT token, 지원되지 않는 JWT 토큰 입니다.");
         } catch (IllegalArgumentException e) {
             logger.error("잘못된 JWT 토큰 입니다.");
-            throw new GlobalExceptionHandler.EmptyClaimsException("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
-            //logger.error("JWT claims is empty, 잘못된 JWT 토큰 입니다.");
+            throw new GlobalExceptionHandler.EmptyClaimsException("잘못된 JWT 토큰 입니다.");
         }
-        //return false;
+
     }
 
     // 토큰에서 사용자 정보 가져오기
     public Claims getUserInfoFromToken(String token) {
-        //return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token.substring(7)).getBody();
         return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(substringToken(token)).getBody();
     }
 }

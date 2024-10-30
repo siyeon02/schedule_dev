@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class ErrorResponse {
-    private String errorcode;
     private String errormessage;
+    private int errorcode;
 
-    public ErrorResponse(String errorcode, String message) {
-        this.errorcode = errorcode;
+    public ErrorResponse(String message, int errorcode) {
         this.errormessage = message;
+        this.errorcode = errorcode;
     }
 }
