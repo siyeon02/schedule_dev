@@ -1,6 +1,6 @@
 package com.sparta.schedule_develop.config;
 
-import ExceptionHandler.GlobalExceptionHandler;
+import com.sparta.schedule_develop.ExceptionHandler.GlobalExceptionHandler;
 import com.sparta.schedule_develop.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;

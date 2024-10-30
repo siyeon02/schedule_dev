@@ -1,4 +1,4 @@
-package ExceptionHandler;
+package com.sparta.schedule_develop.ExceptionHandler;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -11,6 +11,12 @@ import java.nio.file.AccessDeniedException;
 @RestControllerAdvice
 @Getter
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler({EntityNotFoundException.class})
+    public ResponseEntity<ErrorResponse> handleArgumentException(EntityNotFoundException ex) {
+        ErrorResponse response = new ErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 
     @ExceptionHandler({InvalidTokenException.class})
     public ResponseEntity<ErrorResponse> handleInvalidTokenException(InvalidTokenException ex) {
@@ -40,12 +46,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex) {
         ErrorResponse response = new ErrorResponse("권한이 없습니다.", HttpStatus.FORBIDDEN.value());
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
-    }
-
-    @ExceptionHandler({IllegalArgumentException.class})
-    public ResponseEntity<ErrorResponse> handleArgumentException(IllegalArgumentException ex) {
-        ErrorResponse response = new ErrorResponse(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     // 추가적인 예외 처리

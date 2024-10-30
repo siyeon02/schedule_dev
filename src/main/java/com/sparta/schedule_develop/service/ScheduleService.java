@@ -1,6 +1,7 @@
 package com.sparta.schedule_develop.service;
 
-import ExceptionHandler.GlobalExceptionHandler;
+import com.sparta.schedule_develop.ExceptionHandler.EntityNotFoundException;
+import com.sparta.schedule_develop.ExceptionHandler.GlobalExceptionHandler;
 import com.sparta.schedule_develop.dto.ScheduleRequestDto;
 import com.sparta.schedule_develop.dto.ScheduleResponseDto;
 import com.sparta.schedule_develop.entity.Dashboard;
@@ -62,20 +63,18 @@ public class ScheduleService {
     public ScheduleResponseDto getOneSchedule(Long id) {
         return scheduleRepository.findById(id)
                 .map(ScheduleResponseDto::new)
-                .orElseThrow(() -> new IllegalArgumentException("선택한 스케줄은 존재하지 않습니다"));
+                .orElseThrow(() -> new EntityNotFoundException("선택한 스케줄은 존재하지 않습니다"));
 
     }
 
     @Transactional
     public Long updateSchedule(Long id, ScheduleRequestDto requestDto) {
-//        checkAdminAuthority();
         Schedule schedule = findSchedule(id);
         schedule.update(requestDto.getTitle(), requestDto.getContent());
         return id;
     }
 
     public Long deleteSchedule(Long id) {
-//        checkAdminAuthority();
         Schedule schedule = findSchedule(id);
         scheduleRepository.delete(schedule);
         return id;
@@ -83,16 +82,7 @@ public class ScheduleService {
 
     private Schedule findSchedule(Long id) {
         return scheduleRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("선택한 스케줄은 존재하지 않습니다.")
+                new EntityNotFoundException("선택한 스케줄은 존재하지 않습니다.")
         );
     }
-
-//    // ADMIN 권한 확인 메서드
-//    private void checkAdminAuthority() {
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        if (authentication == null || authentication.getAuthorities().stream()
-//                .noneMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"))) {
-//            throw new AccessDeniedException("권한이 없습니다.");
-//        }
-//    }
 }

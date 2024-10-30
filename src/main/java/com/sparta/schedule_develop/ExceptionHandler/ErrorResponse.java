@@ -1,4 +1,4 @@
-package ExceptionHandler;
+package com.sparta.schedule_develop.ExceptionHandler;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

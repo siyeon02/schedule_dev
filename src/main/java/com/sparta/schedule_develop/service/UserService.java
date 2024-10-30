@@ -1,5 +1,6 @@
 package com.sparta.schedule_develop.service;
 
+import com.sparta.schedule_develop.ExceptionHandler.EntityNotFoundException;
 import com.sparta.schedule_develop.config.JWTUtil;
 import com.sparta.schedule_develop.config.PasswordEncoder;
 import com.sparta.schedule_develop.dto.LoginRequestDto;
@@ -83,14 +84,6 @@ public class UserService {
         return jwtUtil.createToken(user.getUsername(), user.getRole());
     }
 
-//    public UserResponseDto createUser(UserRequestDto requestDto) {
-//        User user = new User(requestDto);
-//        User saveUser = userRepository.save(user);
-//        UserResponseDto userResponseDto = new UserResponseDto(saveUser);
-//
-//        return userResponseDto;
-//    }
-
     public List<UserResponseDto> getUsers() {
         return userRepository.findAll().stream().map(UserResponseDto::new).toList();
     }
@@ -110,7 +103,7 @@ public class UserService {
 
     private User findUser(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
-                new IllegalArgumentException("선택한 유저는 존재하지 않습니다"));
+                new EntityNotFoundException("선택한 유저는 존재하지 않습니다"));
     }
 
 
